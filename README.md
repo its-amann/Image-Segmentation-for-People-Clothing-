@@ -7,12 +7,12 @@
 
 | **Section** | **Description**                            |
 |-------------|--------------------------------------------|
-| 1           | Project Configuration                      |
-| 2           | Dataset Loading and Preprocessing          |
-| 3           | Dataset Visualization                      |
-| 4           | Model Architectures Overview               |
-| 5           | UNet Model                                 | 
-| 6          | Conclusion and Future Work                 |
+| 2           | Project Configuration                      |
+| 3           | Dataset Loading and Preprocessing          |
+| 4           | Dataset Visualization                      |
+| 5          | Model Architectures Overview               |
+| 6           | UNet Model                                 | 
+| 7          | Conclusion and Future Work                 |
 
 ---
 
@@ -486,7 +486,7 @@ model(tf.ones([1, 3, 512, 512])).logits.shape
 ![alt text](image-4.png)
 
 
-# Section 12: Conclusion and Future Work
+# Section 7: Conclusion and Future Work
 
 ## 12.1 Summary of Achievements
 - Successful implementation of segmentation models.
