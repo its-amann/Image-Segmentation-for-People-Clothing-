@@ -1,505 +1,360 @@
+![image](https://github.com/user-attachments/assets/11f3afc6-ab65-4329-8969-d9ba7fa66f40)
 
-# People Clothing Segmentation Project
+
+<h1 align="center">🎓 Clothing Segmentation and Image Generation 🎓</h1>
+
+<p align="center">
+<strong>A project focused on clothing segmentation using SegFormer and augmented image generation with Stable Diffusion.</strong>
+</p>
+
+<p align="center">
+<a href="https://github.com/your-username/your-repo">
+<img src="https://img.shields.io/github/license/its-amann/Image-Segmentation-for-People-Clothing-.svg" alt="License">
+</a>
+<a href="https://github.com/your-username/your-repo/issues">
+<img src="https://img.shields.io/github/issues/its-amann/Image-Segmentation-for-People-Clothing-.svg" alt="Issues">
+</a>
+<a href="https://github.com/your-username/your-repo/stargazers">
+<img src="https://img.shields.io/github/stars/its-amann/Image-Segmentation-for-People-Clothing-.svg" alt="Stars">
+</a>
+</p>
+
+🚀 Overview
+
+Welcome to the Clothing Segmentation and Image Generation project, a cutting-edge and multifaceted system combining deep learning techniques for image analysis and synthesis. This project utilizes state-of-the-art models like SegFormer for clothing segmentation and Stable Diffusion for generating new, augmented images based on segmentation masks. It is designed to demonstrate a robust workflow for both understanding and modifying visual content.
+
+✨ Wow Factors:
+
+Advanced Segmentation with SegFormer: Leverages the SegFormer model for precise pixel-level segmentation of clothing items.
+
+Augmented Image Generation via Stable Diffusion: Utilizes Stable Diffusion to generate photorealistic images, enhancing datasets and creative possibilities.
+
+Integration with FiftyOne: Employs FiftyOne for comprehensive dataset management, visualization, and evaluation, making the workflow seamless and efficient.
+
+Customizable Pipelines: Offers flexible pipelines for processing and augmenting image datasets, adapting to specific project needs.
+
+![image](https://github.com/user-attachments/assets/f509044f-d9ef-41da-9f21-41ae54b12a32)
+
+🛠 Features
+
+Dataset Preparation: Automated data loading, preprocessing, and splitting for both training and validation sets.
+
+Augmented Dataset Generation: Utilizes albumentations for image and mask augmentation, enhancing model training.
+
+Clothing Segmentation: Employs a pre-trained SegFormer model to predict pixel-wise clothing segmentations.
+
+Stable Diffusion Integration: Generates new images by masking the clothing segmentations and using stable diffusion for inpainting.
+
+FiftyOne Integration: Manages, visualizes, and evaluates the dataset using FiftyOne, including calculation of mean IoU and other evaluation metrics.
+
+Customizable Model Training: Allows for the training and fine-tuning of SegFormer models, adaptable to specific dataset characteristics.
+
+Image and Mask Generation: Includes a process to extract and generate masks from segmentation maps.
+
+Evaluation Metrics: Computes per-class and overall evaluation metrics using FiftyOne and evaluate library.
+
+📸 Screenshots
+<![image](https://github.com/user-attachments/assets/386f3e08-a3ee-4d5c-8ef3-b30a9095a869)
+
+<div align="center">
+<font size="5">**Segmentation Results with predicted Masks on the Image**</font>
+</div>
+
+![image](https://github.com/user-attachments/assets/6b239447-bd44-46ca-a9aa-d3522b694dce)
+
+<div align="center">
+<font size="5">**Augmented Image Generation via Stable Diffusion after Segmentation**</font>
+</div>
+
+## 🔧 Installation
+
+### Prerequisites
+
+- **Python 3.10+** installed on your machine. [Download Python](https://www.python.org/downloads/)
+- **CUDA enabled GPU** for efficient model training and inference.
+- **PyTorch** with CUDA support. Install following [PyTorch instructions](https://pytorch.org/get-started/locally/).
+- **Transformers, Diffusers, and other required libraries**. Install using pip:
+
+```bash
+pip install -q datasets evaluate
+pip install fiftyone==0.23.0rc1
+pip install -q torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install -q regex tqdm
+pip install -q diffusers transformers accelerate scipy
+pip install -q -U xformers
+```
+
+### Steps
+
+1. **Clone the Repository:**
+
+```bash
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+```
+
+2. **Install Dependencies:**
+```bash
+pip install -r requirements.txt
+```
+   (You may need to create a requirements.txt file listing all used libraries)
+
+3. **Download Dataset:**
+   You will need to download the "People Clothing Segmentation" dataset from Kaggle. Ensure you have the Kaggle CLI installed and properly configured, then use the following command:
+```bash
+pip install -q kaggle
+mkdir ~/.kaggle
+#place your kaggle.json file inside ~/.kaggle directory
+cp kaggle.json ~/.kaggle/
+chmod 600 /root/.kaggle/kaggle.json
+kaggle datasets download -d rajkumarl/people-clothing-segmentation
+```
+  Unzip the downloaded dataset:
+```bash
+unzip "/content/people-clothing-segmentation.zip" -d "/content/dataset/"
+```
+
+4.  **Run the Notebook**
+    Open the downloaded notebook (.ipynb) file with an environment with all dependencies and run through cells sequentially.
 
 ---
 
-# Table of Sections
+## 💻 Usage
 
-| **Section** | **Description**                            |
-|-------------|--------------------------------------------|
-| 2           | Project Configuration                      |
-| 3           | Dataset Loading and Preprocessing          |
-| 4           | Dataset Visualization                      |
-| 5          | Model Architectures Overview               |
-| 6           | UNet Model                                 | 
-| 7          | Conclusion and Future Work                 |
+This project is designed to be run within a Jupyter Notebook environment, making it easy to step through each stage of the workflow. Here are the general steps and key operations:
 
----
+### Initial Setup:
 
-# Section 1: Introduction
+1.  **Environment Setup:** Start by installing the required libraries in your environment to ensure that there is no dependency conflict.
 
-## 1.1 Project Overview
-The primary objective of this project is to perform clothing segmentation from images using deep learning models. The implementation includes popular models such as UNet and DeepLabV3, focusing on accuracy and model interpretability.
+2. **Dataset Download and Configuration:** Download the required dataset from Kaggle using the CLI and then unpack it to the specified directory.
 
-## 1.2 Expected Outcomes
-- **High Accuracy:** Achieving precise segmentation for clothing.
-- **Model Interpretability:** Explaining model decisions through visualization.
-- **Scalability:** Deploying a robust system for real-world environments.
+3. **Data Splitting and Preprocessing:** The notebook automatically handles splitting data into training and validation sets and applying necessary transformations such as resize, normalization, and data augmentation.
 
-## 1.3 Technology Stack
-- **Frameworks:** TensorFlow, Keras
-- **Data Processing:** NumPy, Pandas
-- **Visualization:** Matplotlib, Seaborn
-- **Pretrained Models:** DeepLabV3
-- **Development Environment:** Jupyter Notebook
-- **Deployment:** FastAPI, ONNX
+### Segmentation Model Training:
 
----
+1. **Model Loading:** Load the pre-trained SegFormer model, modifying the classification head to match the number of classes in the dataset.
+2. **Training and Evaluation:** Train the model with the prepared training dataset, and evaluate the model after every epoch with the evaluation dataset using mean IoU, overall accuracy etc.
+3. **Visualization:** Use the visual results shown in the notebook to assess your model performance.
 
-# Section 2: Project Configuration
+### Image Augmentation with Stable Diffusion:
 
-## 2.1 Library Imports
-We import essential libraries for model development, evaluation, and visualization.
+1.  **Stable Diffusion Pipeline:** Create an instance of the Stable Diffusion pipeline for inpainting.
+2. **Mask Generation:** Segmented masks are generated, and those are used as input to the pipeline along with the original image.
+3.  **Augmented Image Generation:** Apply inpainting to generate modified versions of the original images.
 
-## 2.2 Hyperparameter Setup
--![alt text](image-1.png)
+### FiftyOne Integration:
 
-This code defines hyperparameters and settings for a semantic segmentation task related to people and clothing segmentation. Here's a detailed explanation:
+1. **Dataset Loading:** Create a FiftyOne dataset from the validation images and masks.
+2. **Evaluation Metrics:** Compute per-class and overall evaluation metrics with FiftyOne.
+3. **Data Vizualisation:** Visualize all samples, masks and the predicted masks using FiftyOne.
 
-### 1. **Image Dimensions**
-```python
-H, W = 512, 512
-```
-- **Purpose**: Sets the height and width of the input images.
-- **Reason**: Standardizing image sizes simplifies training and improves computational efficiency.
-- **Benefit**: Ensures consistent input size, enabling batch processing and compatibility with deep learning models.
+### Detailed Steps
 
-### 2. **Batch Size**
-```python
-BATCH_SIZE = 2
-```
-- **Purpose**: Defines the number of samples processed before the model is updated.
-- **Reason**: A small batch size reduces memory usage, allowing training on memory-constrained GPUs.
-- **Benefit**: Achieves a balance between memory efficiency and model performance.
+1.  **Data Download and Unpacking**:
 
-### 3. **Number of Classes**
-```python
-N_CLASSES = 24
-```
-- **Purpose**: Sets the number of segmentation classes for clothing types.
-- **Reason**: Each class represents a specific clothing item or body part.
-- **Benefit**: Enables multi-class segmentation for complex tasks.
+    ```python
+    !pip install -q kaggle
+    !mkdir ~/.kaggle
+    !cp kaggle.json ~/.kaggle/
+    !chmod 600 /root/.kaggle/kaggle.json
+    !kaggle datasets download -d rajkumarl/people-clothing-segmentation
+    !unzip "/content/people-clothing-segmentation.zip" -d "/content/dataset/"
+    ```
+2.  **Data Preprocessing**
 
-### 4. **Learning Rate**
-```python
-LR = 5e-5
-```
-- **Purpose**: Determines the step size at each iteration during optimization.
-- **Reason**: A small learning rate stabilizes training, especially for deep models.
-- **Benefit**: Reduces the risk of overshooting the minimum of the loss function.
+    ```python
+    H,W = 512,512
+    BATCH_SIZE = 2
+    N_CLASSES = 24
+    LR = 5e-5
+    N_EPOCHS = 20
+    WEIGHT_DECAY_RATE = 0.01
+    MEAN = [123.675, 116.28, 103.53]
+    STD = [58.395, 57.12, 57.375]
+    checkpoint_filepath = "/content/drive/MyDrive/fiftyone/segformer_b5_clothing.h5"
 
-### 5. **Number of Epochs**
-```python
-N_EPOCHS = 20
-```
-- **Purpose**: Specifies how many times the entire dataset is passed through the model.
-- **Reason**: Sufficient epochs ensure proper convergence.
-- **Benefit**: Allows the model to learn complex patterns without overfitting.
+    ```
+    This code cell sets up the core variables required for the training process. This includes image dimensions (H, W), batch size, learning rate, epochs, mean and standard deviations for normalization and model checkpoint path.
 
-### 6. **Weight Decay Rate**
-```python
-WEIGHT_DECAY_RATE = 0.01
-```
-- **Purpose**: Adds L2 regularization to the loss function to prevent overfitting.
-- **Reason**: Penalizes large weights to improve generalization.
-- **Benefit**: Helps reduce model complexity and prevents overfitting.
+3. **Loading Data**
+    ```python
+    train_dataset = tf.data.Dataset.from_tensor_slices(
+        ([im_path+i for i in os.listdir(im_path)],
+        [anno_path+"img"+i[3:] for i in os.listdir(im_path)])
+    )
+    val_dataset = tf.data.Dataset.from_tensor_slices(
+        ([val_im_path+i for i in os.listdir(val_im_path)],
+        [val_anno_path+"img"+i[3:] for i in os.listdir(val_im_path)])
+    )
+    ```
+     The above code loads images and masks file paths to dataset objects for training and evaluation.
 
-### 7. **Mean and Standard Deviation**
-```python
-MEAN = [123.675, 116.28, 103.53]
-STD = [58.395, 57.12, 57.375]
-```
-- **Purpose**: Normalize the input images by standardizing pixel values.
-- **Reason**: Preprocessing ensures consistent model input scaling.
-- **Benefit**: Improves training stability and convergence speed.
+4. **Data Transformation**
 
-### 8. **Checkpoint Filepath**
-```python
-checkpoint_filepath = "/content/drive/MyDrive/fiftyone/segformer_b5_clothing.h5"
-```
-- **Purpose**: Specifies where the model's weights are saved during training.
-- **Reason**: Allows checkpointing to resume training if interrupted.
-- **Benefit**: Ensures model progress is preserved and allows evaluation of the best model.
+  ```python
+    def preprocess(im_path, anno_path):
+      img = tf.io.decode_jpeg(tf.io.read_file(im_path))
+      img = tf.cast(img,tf.float32)
+      img = (img-MEAN)/STD
 
+      anno = tf.io.decode_jpeg(tf.io.read_file(anno_path))
+      anno = tf.cast(tf.squeeze(anno,-1),tf.float32)
 
+      return img, anno
+  ```
 
----
+  This code defines a preprocessing function `preprocess` that decodes image and mask files, casts them to floating-point tensors, normalizes the images, and prepares them for model input.
 
-# Section 3: Dataset Loading and Preprocessing
+  ```python
+  transform = A.Compose([
+      A.RandomCrop (H,W, p=1.0),
+      A.HorizontalFlip(p=0.3),
+      A.VerticalFlip(p=0.3),
+      A.RandomRotate90(p=0.3),
+      A.Transpose(p=0.3),
+      A.Sharpen (alpha=(0.2, 0.5), lightness=(0.5, 1.0), p=0.1),
+      A.RandomShadow (shadow_roi=(0, 0.5, 1, 1),
+                      num_shadows_lower=1, num_shadows_upper=2,
+                      shadow_dimension=5, p=0.1),
+      A.RandomBrightnessContrast(p=0.2),
+      #A.Resize(H,W),
+  ])
 
-## 3.1 Dataset Source
-![alt text](image.png)
-I'll review the file contents to explain the data preparation process in detail. Give me a moment.
+  val_transform = A.Compose([
+      A.Resize(H,W),
+  ])
 
-The data preparation process in the notebook involves several key steps. Here’s a breakdown:
+  ```
+  The above defines the augmentation policy for training and testing using albumentations library.
 
-### 1. **Dataset Installation and Environment Setup**
-```python
-!pip install -q datasets evaluate
-!pip install fiftyone==0.23.0rc1
-!pip install -q torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-!pip install -q regex tqdm
-!pip install -q diffusers transformers accelerate scipy
-!pip install -q -U xformers
-```
-- **Purpose**: Installs essential libraries for data processing, evaluation, and training.
-- **Reason**: Ensures all dependencies are installed for seamless execution.
-- **Benefit**: Automates environment setup, saving manual installation effort.
-
----
-
-### 2. **Dataset Download from Kaggle**
-```python
-!pip install -q kaggle
-!mkdir ~/.kaggle
-!cp kaggle.json ~/.kaggle/
-!chmod 600 /root/.kaggle/kaggle.json
-!kaggle datasets download -d rajkumarl/people-clothing-segmentation
-```
-- **Purpose**: Downloads the people clothing segmentation dataset from Kaggle.
-- **Reason**: Provides access to the required dataset.
-- **Benefit**: Automates dataset acquisition, making the process reproducible.
-
----
-
-### 3. **Data Extraction**
-```python
-!unzip "/content/people-clothing-segmentation.zip" -d "/content/dataset/"
-```
-- **Purpose**: Extracts the downloaded dataset into a specified directory.
-- **Reason**: Prepares the data files for easy access during loading.
-- **Benefit**: Organizes dataset files in a structured format for training and evaluation.
-
----
-
-### 4. **Data Loading**
-```python
-df = pd.read_csv("/content/dataset/labels.csv")
-```
-- **Purpose**: Loads the dataset’s metadata from a CSV file.
-- **Reason**: Retrieves image file paths and labels for segmentation tasks.
-- **Benefit**: Provides a structured view of the dataset for easy iteration.
-
----
-
-### 5. **Data Paths Definition**
-```python
-im_path = "/content/dataset/png_images/IMAGES/"
-anno_path = "/content/dataset/png_masks/MASKS/"
-val_im_path = "/content/val_dataset/png_images/IMAGES/"
-val_anno_path = "/content/val_dataset/png_masks/MASKS/"
-```
-- **Purpose**: Defines paths for training and validation datasets.
-- **Reason**: Segregates image and mask data for efficient loading.
-- **Benefit**: Simplifies file management and prevents path-related errors.
-
----
-
-The preprocessing and data augmentation steps in the notebook are organized into well-defined functions. Here’s a detailed explanation:
-
----
-
-### **1. Preprocessing Function**
-```python
-def preprocess(im_path, anno_path):
-    img = tf.io.decode_jpeg(tf.io.read_file(im_path))
-    img = tf.cast(img, tf.float32)
-    img = (img - MEAN) / STD
-
-    anno = tf.io.decode_jpeg(tf.io.read_file(anno_path))
-    anno = tf.cast(tf.squeeze(anno, -1), tf.float32)
-
-    return img, anno
-```
-
-#### **Explanation:**
-- **Image Loading**: Reads the image and annotation mask using TensorFlow’s file I/O functions.
-- **Normalization**: Subtracts the mean and divides by the standard deviation to normalize pixel values.
-- **Annotation Processing**: Squeezes the last dimension of the annotation mask to match the expected shape.
-
-#### **Reason and Benefit:**
-- This function ensures input consistency and normalization, aiding in stable training and faster convergence.
-
----
-
-### **2. Preprocessing Pipeline Setup**
-```python
-prep_train_ds = (
-    train_dataset
-    .map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
-)
-
-prep_val_ds = (
-    val_dataset
-    .map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
-)
-```
-
-#### **Explanation:**
-- **Mapping**: Applies the preprocessing function to the training and validation datasets.
-- **Parallel Processing**: Uses TensorFlow's `AUTOTUNE` to parallelize loading and preprocessing.
-
-#### **Reason and Benefit:**
-- Ensures efficient and parallelized data loading, minimizing I/O bottlenecks.
-
----
-
-### **3. Data Augmentation Functions (Using Albumentations)**
-```python
-def aug_albument(image, mask):
-    augmented = transform(image=image, mask=mask)
-    return [tf.convert_to_tensor(augmented["image"], dtype=tf.float32),
-            tf.convert_to_tensor(augmented["mask"], dtype=tf.float32)]
-
-def val_aug_albument(image, mask):
-    augmented = val_transform(image=image, mask=mask)
-    return [tf.convert_to_tensor(augmented["image"], dtype=tf.float32),
-            tf.convert_to_tensor(augmented["mask"], dtype=tf.float32)]
-```
-
-#### **Explanation:**
-- **Data Augmentation**: Applies augmentations defined in `transform` and `val_transform` (likely set elsewhere).
-- **Conversion**: Converts augmented outputs to TensorFlow tensors.
-
-#### **Reason and Benefit:**
-- Increases data variability and prevents overfitting by introducing image transformations such as rotations, flips, and scaling.
-
----
-
-### **4. Augmentation Wrappers**
-```python
-def augment(image, mask):
-    aug_output = tf.numpy_function(func=aug_albument, inp=[image, mask], Tout=[tf.float32, tf.float32])
-    return {"pixel_values": tf.transpose(aug_output[0], (2, 0, 1)), "labels": aug_output[1]}
-
-def val_augment(image, mask):
-    aug_output = tf.numpy_function(func=val_aug_albument, inp=[image, mask], Tout=[tf.float32, tf.float32])
-    return {"pixel_values": tf.transpose(aug_output[0], (2, 0, 1)), "labels": aug_output[1]}
-```
-
-#### **Explanation:**
-- **Wrapping**: Uses `tf.numpy_function` to apply Albumentations-based augmentation while preserving TensorFlow compatibility.
-- **Transposition**: Rearranges tensor dimensions to match the model’s expected input format.
-
-#### **Reason and Benefit:**
-- Integrates a powerful third-party augmentation library while maintaining TensorFlow compatibility.
-
----
-
-### **5. Dataset Finalization**
-```python
-BATCH_SIZE = 2
-
-train_ds = (
+  ```python
+  train_ds = (
     prep_train_ds
     .shuffle(10)
-    .map(augment, num_parallel_calls=tf.data.AUTOTUNE)
+    .map(augment,num_parallel_calls=tf.data.AUTOTUNE)
     .batch(BATCH_SIZE)
     .prefetch(tf.data.AUTOTUNE)
-)
-
-val_ds = (
+  )
+  val_ds = (
     prep_val_ds
-    .map(val_augment, num_parallel_calls=tf.data.AUTOTUNE)
+    .map(val_augment,num_parallel_calls=tf.data.AUTOTUNE)
     .batch(BATCH_SIZE)
     .prefetch(tf.data.AUTOTUNE)
-)
-```
-
-#### **Explanation:**
-- **Shuffling**: Randomly shuffles the training data to reduce model bias.
-- **Batching**: Groups samples into batches for efficient GPU processing.
-- **Prefetching**: Loads data asynchronously to improve training speed.
-
-#### **Reason and Benefit:**
-- Optimizes the data pipeline for maximum efficiency, reducing model training latency and improving overall performance.
-
----
-
-These steps ensure robust data preparation through normalization, augmentation, and pipeline optimization, enabling effective training of the segmentation model.
-
-# Section 4: Dataset Visualization
-
-## 4.1 Sample Visualization
-- ![alt text](image-2.png)
-
-The data visualization in the notebook uses Matplotlib to display training samples and their corresponding segmentation labels. Here’s a detailed explanation:
----
-
-### **Explanation:**
-1. **Figure Initialization**
-   ```python
-   plt.figure(figsize=(50,50))
-   ```
-   - Initializes a large Matplotlib figure for displaying results.
-
-2. **Data Extraction**
-   ```python
-   for data in train_ds.take(1):
-       images = data['pixel_values']
-       labels = data['labels']
-   ```
-   - Extracts one batch from the training dataset.
-   - `images` holds the input images.
-   - `labels` holds corresponding segmentation masks.
-
-3. **Image and Segmentation Display**
-   ```python
-   for i in range(BATCH_SIZE*2):
-       if i == 4:
-           break
-       ax = plt.subplot(1, BATCH_SIZE*2, i+1)
-   ```
-   - Loops through both images and labels, creating subplots for display.
-   - `BATCH_SIZE*2` ensures equal number of images and labels.
-
-4. **Conditional Plotting**
-   ```python
-   if i % 2 == 0:
-       plt.imshow(tf.transpose(images[i//2], (1, 2, 0)))
-       plt.title("Image")
-   else:
-       plt.imshow(labels[i//2])
-       plt.title("Segmentation")
-   ```
-   - Displays alternating images and segmentation masks:
-     - **Even Indices**: Shows the input image, transposing channels to RGB.
-     - **Odd Indices**: Shows the corresponding segmentation mask.
-
-5. **Formatting**
-   ```python
-   plt.axis("off")
-   ```
-   - Turns off axes to keep the focus on visual content.
-
-6. **Final Display**
-   ```python
-   plt.show()
-   ```
-   - Renders the visualization.
-
----
-
-### **Reason and Benefit:**
-- **Reason**: This visualization step helps verify that data is correctly preprocessed and segmented.
-- **Benefit**: Provides immediate feedback on data integrity, aiding in debugging and visual confirmation of the model's expected input/output structure.---
-
-# Section 5: Model Architectures Overview
-
-The notebook uses the **SegFormer** architecture for semantic segmentation. Here's a detailed explanation of the model architecture and related configurations:
-
----
-
-### **1. Model Import and Initialization**
-```python
-from transformers import TFSegformerForSemanticSegmentation
-
-model_id = "nvidia/segformer-b5-finetuned-cityscapes-1024-1024"
-
-model = TFSegformerForSemanticSegmentation.from_pretrained(
-    model_id,
-    num_labels=len(label2id),
-    id2label=id2label,
-    label2id=label2id,
-    ignore_mismatched_sizes=True
-)
-```
-
----
-
-### **Model Overview**
-**SegFormer** is a transformer-based architecture for semantic segmentation, designed for high accuracy and efficiency. It uses hierarchical transformers for multi-scale feature extraction.
-
----
-
-### **Model Architecture Breakdown**
-1. **Hierarchical Transformer Encoder**:
-   - Extracts multi-level features at different scales.
-   - Each level processes features independently, using attention mechanisms.
-
-2. **Multi-Scale Feature Fusion (MSF)**:
-   - Combines features from all levels into a unified representation.
-
-3. **Segmentation Head**:
-   - Applies convolutional layers to generate segmentation masks.
-
----
-
-### **Model Configuration Details**
-- **Pretrained Model ID**: `"nvidia/segformer-b5-finetuned-cityscapes-1024-1024"`
-- **Fine-Tuned for Cityscapes Dataset**: This pretrained model is adapted for urban segmentation tasks.
-- **Number of Labels**:
-  ```python
-  num_labels=len(label2id)
+  )
   ```
-  - Dynamically set based on the dataset being used (24 classes in this task).
-- **Label Mappings**:
-  ```python
-  id2label=id2label
-  label2id=label2id
-  ```
-  - Maps numerical IDs to human-readable class names.
+  This creates final training and testing dataset with all augmentation and batching techniques.
+
+5. **Modeling**
+    ```python
+      model_id = "nvidia/segformer-b5-finetuned-cityscapes-1024-1024"
+      model = TFSegformerForSemanticSegmentation.from_pretrained(
+      model_id,
+      num_labels = len(label2id),
+      id2label = id2label,
+      label2id = label2id,
+      ignore_mismatched_sizes = True)
+    ```
+    This code will load the required pre-trained SegFormer model and initialize with the desired number of classes.
+
+6.  **Training and Evaluation**:
+    ```python
+        model.compile(optimizer=optimizer)
+        history = model.fit(
+        train_ds,
+        validation_data=val_ds,
+        epochs=num_epochs,
+        callbacks=callbacks,
+    )
+    ```
+    This will start the model training loop with the given training and validation dataset.
+
+7.  **Stable Diffusion Augmentation**:
+    ```python
+    prompt = "A photorealistic photo of a woman wearing a green-colored nice looking coat all green high resolution"
+    image, mask_image = generate_inputs(
+       "/content/val_dataset/png_images/IMAGES/img_0003.png","coat")
+    image = pipe(prompt=prompt, image=image, mask_image=mask_image, ).images[0]
+    ```
+    This part loads the Stable Diffusion model and runs the augmentations on the generated masks. The generate input function will get the required images and masks for running the stable diffusion pipeline.
+
+    ```python
+     def augpaint(pipe, prompt, pil_image, pil_mask, guidance_scale, num_inference_steps):
+
+        num_images_per_prompt = 1
+        generator = torch.Generator(device="cuda").manual_seed(10)
+
+        encoded_images = []
+
+        for i in range(num_images_per_prompt):
+            image = pipe(prompt=prompt, guidance_scale=guidance_scale,
+                            num_inference_steps=num_inference_steps, generator=generator,
+                            image=pil_image, mask_image=pil_mask, strength=0.99).images[0]
+
+            encoded_images.append(image.resize((550,825)))
+        return encoded_images[0]
+    ```
+    This function will run the stable diffusion inpainting pipeline using the generated mask and image using the given text prompt.
+
+    ```python
+      def transform_sample(sample, select_class, prompt):
+        hash = create_hash()
+        filename = sample.filepath.split("/")[-1][:-4]+"_"+str(hash)+".png"
+        pipe = pipeline
+        im,mask = generate_inputs(
+        sample.filepath, sample.ground_truth.mask_path,
+         label2id[select_class])
+    
+        out = augpaint(pipe, prompt, im, mask, guidance_scale, num_inference_steps)
+        im_saved = out.save(sample.filepath[:-4]+"_"+str(hash)+".png")
+        shutil.copy(sample.ground_truth.mask_path,
+                    sample.ground_truth.mask_path[:-4]+"_"+str(hash)+".png",
+                    )
+        display(out)
+        new_sample = fo.Sample(
+            filepath=sample.filepath[:-4]+"_"+str(hash)+".png",
+            ground_truth=fo.Segmentation(
+                mask_path=sample.ground_truth.mask_path[:-4]+"_"+str(hash)+".png"),
+        )
+        return new_sample
+    ```
+    This function will tie all together, it gets the images and the required masks, and then runs the stable diffusion inpainting pipeline using the prompt. Finally, it creates a new sample with the newly generated image and mask.
+
+8.  **FiftyOne Evaluation**:
+    ```python
+      session = fo.launch_app(dataset,port=51)
+    ```
+    This code launches the FiftyOne application to visualize the generated segmentation and augmented images.
 
 ---
 
-### **Model Inference Example**
-```python
-model(tf.ones([1, 3, 512, 512])).logits.shape
-```
-- **Input Format**: A dummy tensor of shape `[1, 3, 512, 512]` simulating a single RGB image.
-- **Output Shape**: The `logits` tensor's shape indicates the predicted segmentation mask dimensions.
+## 🤝 Contributing
+
+1.  **Fork the Project**
+2.  **Create your Feature Branch:** `git checkout -b feature/AmazingFeature`
+3.  **Commit your Changes:** `git commit -m 'Add some AmazingFeature'`
+4.  **Push to the Branch:** `git push origin feature/AmazingFeature`
+5.  **Open a Pull Request**
 
 ---
 
-### **Reason and Benefit**
-- **Reason**: The SegFormer model was chosen for its state-of-the-art performance in semantic segmentation tasks, offering high accuracy and scalability.
-- **Benefit**: The hierarchical design and efficient transformer backbone enable real-time segmentation with fewer computational resources compared to traditional CNN-based architectures.
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-# Section 6: Modelling
-![alt text](image-3.png)
+## Acknowledgments
+This project has been made possible with these incredible tools:
+- Tensorflow and Keras
+- HuggingFace Transformers and Diffusers
+- FiftyOne for Data Visualization and Evaluation
+- Albumentations for Data Augmentation
+- OpenCV for Image processing
+- PyTorch
+- Many other open source contributors that have helped in their journey.
 
+<p align="center">
+  Made with ❤️ by Your Name
+</p>
 
-### **Explanation of Code:**
-
-1. **Loading the Pretrained Model:**
-   ```python
-   model = TFSegformerForSemanticSegmentation.from_pretrained(
-       model_id,
-       num_labels=24,
-       id2label=id2label,
-       label2id=label2id,
-       ignore_mismatched_sizes=True
-   )
-   ```
-   This loads the SegFormer model (B5 variant fine-tuned on Cityscapes). The `id2label` and `label2id` are dictionaries that map class labels to integer IDs and vice versa.
-
-2. **Preprocessing and Normalization:**
-   The `preprocess_image` function reads, resizes, and normalizes the image and its corresponding segmentation mask using the pre-defined `MEAN` and `STD` values for normalization. This ensures that the input image is appropriately formatted before being passed to the model.
-
-3. **Data Pipeline Setup:**
-   The dataset is preprocessed and augmented using TensorFlow's `map` and `batch` methods. You can add shuffling and prefetching for better performance during training.
-
-4. **Model Training:**
-   The training loop uses a simple `train_step` function, which calculates the loss (using sparse categorical cross-entropy for segmentation), applies the gradients, and updates the model weights.
-
-5. **Inference:**
-   After training, you can use the trained model to perform segmentation on a new image. The result is the predicted segmentation mask.
-
----
-
-### **Customizing for Your Dataset:**
-- Adjust `num_labels` to the number of classes in your dataset.
-- Define `id2label` and `label2id` dictionaries according to the labels in your dataset.
-- Update the dataset paths and preprocessing logic for your specific dataset.
-![alt text](image-4.png)
-
-
-# Section 7: Conclusion and Future Work
-
-## 12.1 Summary of Achievements
-- Successful implementation of segmentation models.
-- Significant improvement in prediction accuracy.
-
-## 12.2 Future Enhancements
-- Explore additional model architectures.
-- Implement real-time segmentation.
-
----
-
-# Final Thoughts
-
-We hope this guide provides detailed insights into running and deploying the People Clothing Segmentation project. With its modular design, high performance, and flexibility, this project is well-suited for real-world applications, research, and continuous development.
-
-Thank you for exploring the People Clothing Segmentation project. Feel free to contribute, raise issues, or suggest improvements.
