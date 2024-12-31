@@ -355,6 +355,6 @@ This project has been made possible with these incredible tools:
 - Many other open source contributors that have helped in their journey.
 
 <p align="center">
-  Made with ❤️ by Your Name
+  Made with ❤️ by Aman
 </p>
 
